@@ -25,41 +25,42 @@ namespace knights_quest_cs.Data
     public Knight GetById(int id)
     {
       var sql = "SELECT * FROM knight WHERE id = @id";
-      return _db.ExecuteScalar<Knight>(sql);
+      return _db.QueryFirstOrDefault<Knight>(sql, new { id });
     }
 
-    public Knight CreateKnight(Knight knightData)
+    public int CreateKnight(Knight knightData)
     {
       var sql = @"
-      INSERT INTO knight(name, homeCastle, quest, questsCompleted, gold);
-      VALUES(@name, @homeCastle, @quest, @questsCompleted, @gold);
+      INSERT INTO knight
+      (name, homeCastle, questId, questsCompleted, gold)
+      VALUES
+      (@name, @homeCastle, @questId, @questsCompleted, @gold);
       SELECT LAST_INSERT_ID();
       ";
 
-      int id = _db.ExecuteScalar<int>(sql, knightData);
-      knightData.Id = id;
-      return knightData;
+      return _db.ExecuteScalar<int>(sql, knightData);
     }
 
-    public Knight UpdateKnight(Knight knightData, int id)
+    public int UpdateKnight(Knight knightData)
     {
       var sql = @"
-  Update knight WHERE id = @id;
-  SET name = @name, 
-  homeCastle = @homeCastle, 
-  quest = @quest, 
-  questsCompleted = @questsCompleted, 
-  gold = @gold;
-  ";
-      knightData.Id = id;
-      return _db.ExecuteScalar<Knight>(sql, knightData);
+        Update knight 
+        SET name = @name, 
+        homeCastle = @homeCastle, 
+        questId = @questId, 
+        questsCompleted = @questsCompleted, 
+        gold = @gold
+        WHERE id = @id;
+        ";
+      return _db.Execute(sql, knightData);
     }
+
     public Knight DeleteKnight(int id)
     {
       var sql = @"
       DELETE knight WHERE id = @id
       ";
-      return _db.ExecuteScalar<Knight>(sql);
+      return _db.ExecuteScalar<Knight>(sql, id);
     }
   }
 }

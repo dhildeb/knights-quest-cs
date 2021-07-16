@@ -28,12 +28,13 @@ namespace knights_quest_cs.Controllers
         return BadRequest(e.Message);
       }
     }
-    public ActionResult<Quest> GetQuests(int id)
+    [HttpGet("{id}")]
+    public ActionResult<Quest> GetQuestById(int id)
     {
       try
       {
-        var quests = _qs.GetById(id);
-        return Ok(quests);
+        var quest = _qs.GetById(id);
+        return Ok(quest);
       }
       catch (System.Exception e)
       {
@@ -42,7 +43,7 @@ namespace knights_quest_cs.Controllers
     }
 
     [HttpPost]
-    public ActionResult<Quest> CreateQuest(Quest questData)
+    public ActionResult<Quest> CreateQuest([FromBody] Quest questData)
     {
       try
       {
@@ -55,12 +56,12 @@ namespace knights_quest_cs.Controllers
       }
     }
 
-    [HttpDelete]
-    public ActionResult<Quest> CompleteQuest(int questId, int knightId)
+    [HttpDelete("{knightId}")]
+    public ActionResult<Quest> CompleteQuest(int knightId)
     {
       try
       {
-        var quest = _qs.CompleteQuest(questId, knightId);
+        var quest = _qs.CompleteQuest(knightId);
         return Ok(quest);
       }
       catch (System.Exception e)

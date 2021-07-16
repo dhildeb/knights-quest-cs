@@ -1,15 +1,15 @@
-CREATE TABLE IF NOT EXIST quest(
-  id int NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'primary key',
-  title varchar(255) COMMENT 'title',
+CREATE TABLE IF NOT EXISTS quest(
+  id int NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'primary key',
+  title VARCHAR(255) NOT NULL COMMENT 'title',
   description VARCHAR(255) COMMENT 'description',
-  reward int COMMENT 'reward',
-  completed BIT COMMENT 'completed'
+  reward int DEFAULT 0 COMMENT 'reward',
+  completed TINYINT COMMENT 'completed'
 ) DEFAULT charset utf8 COMMENT '';
-CREATE TABLE if NOT exist knight(
-  id int NOT NULL PRIMARY KEY COMMENT 'primary key',
-  name varchar(255) NOT NULL COMMENT 'name',
+CREATE TABLE if NOT EXISTS knight(
+  id int NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'primary key',
+  name VARCHAR(255) NOT NULL COMMENT 'name',
   homeCastle VARCHAR(255) COMMENT 'home castle',
-  questCompleted int COMMENT 'total quests completed',
-  gold int COMMENT 'gold' questId int COMMENT 'FK: currest quest',
-  FOREIGN KEY (questId) REFERENCES quest(id)
+  questsCompleted int DEFAULT 0 COMMENT 'total quests completed',
+  gold int DEFAULT 0 COMMENT 'gold',
+  questId int COMMENT 'current quest'
 ) DEFAULT charset utf8 COMMENT '';

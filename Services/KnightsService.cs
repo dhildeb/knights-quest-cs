@@ -25,12 +25,31 @@ namespace knights_quest_cs.Service
 
     public Knight CreateKnight(Knight knightData)
     {
-      return _knightsRepo.CreateKnight(knightData);
+      knightData.QuestsCompleted = 0;
+      int id = _knightsRepo.CreateKnight(knightData);
+      knightData.Id = id;
+      return knightData;
     }
 
     public Knight UpdateKnight(Knight knightData, int id)
     {
-      return _knightsRepo.UpdateKnight(knightData, id);
+      knightData.Id = id;
+      var original = GetById(id);
+      knightData.Gold = knightData.Gold != 0 ? knightData.Gold : original.Gold;
+      knightData.Name = knightData.Name != null ? knightData.Name : original.Name;
+      knightData.QuestId = knightData.QuestId != 0 ? knightData.QuestId : original.QuestId;
+      knightData.QuestsCompleted = knightData.QuestsCompleted != 0 ? knightData.QuestsCompleted : original.QuestsCompleted;
+
+      int updated = _knightsRepo.UpdateKnight(knightData);
+      if (updated > 0)
+      {
+        return knightData;
+      }
+      else
+      {
+        throw new Exception("couldnt update");
+      }
+
     }
     public object DeleteKnight(int id)
     {

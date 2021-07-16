@@ -8,9 +8,13 @@ namespace knights_quest_cs.Service
   public class QuestsService
   {
     private readonly QuestsRepository _questsRepo;
-    public QuestsService(QuestsRepository questsRepo)
+    private readonly KnightsRepository _knightsRepo;
+    private readonly KnightsService _ks;
+    public QuestsService(QuestsRepository questsRepo, KnightsRepository knightsRepo, KnightsService ks)
     {
       _questsRepo = questsRepo;
+      _knightsRepo = knightsRepo;
+      _ks = ks;
     }
 
     public List<Quest> GetAll()
@@ -25,12 +29,21 @@ namespace knights_quest_cs.Service
 
     public Quest CreateQuest(Quest questData)
     {
-      return _questsRepo.CreateQuest(questData);
+      int id = _questsRepo.CreateQuest(questData);
+      questData.Id = id;
+      return questData;
     }
 
-    public object CompleteQuest(int questId, int knightId)
+    public int CompleteQuest(int knightId)
     {
-      return _questsRepo.CompleteQuest(questId, knightId);
+      var knight = _ks.GetById(knightId);
+      var quest = GetById(knight.QuestId);
+      knight.Gold += quest.Reward;
+      knight.QuestsCompleted++;
+      knight.QuestId = 0;
+      knight.Id = knightId;
+      _knightsRepo.UpdateKnight(knight);
+      return _questsRepo.CompleteQuest(knight);
     }
   }
 }

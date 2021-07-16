@@ -28,12 +28,13 @@ namespace knights_quest_cs.Controllers
         return BadRequest(e.Message);
       }
     }
-    public ActionResult<Knight> GetKnights(int id)
+    [HttpGet("{id}")]
+    public ActionResult<Knight> GetKnightById(int id)
     {
       try
       {
-        var knights = _ks.GetById(id);
-        return Ok(knights);
+        var knight = _ks.GetById(id);
+        return Ok(knight);
       }
       catch (System.Exception e)
       {
@@ -42,12 +43,25 @@ namespace knights_quest_cs.Controllers
     }
 
     [HttpPost]
-    public ActionResult<Knight> CreateKnight(Knight knightData)
+    public ActionResult<Knight> CreateKnight([FromBody] Knight knightData)
     {
       try
       {
         var knight = _ks.CreateKnight(knightData);
         return Created($"api/knights/{knight.Id}", knight);
+      }
+      catch (System.Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
+    [HttpPut("{id}")]
+    public ActionResult<Knight> UpdateKnight([FromBody] Knight knightData, int id)
+    {
+      try
+      {
+        var knight = _ks.UpdateKnight(knightData, id);
+        return Ok(knight);
       }
       catch (System.Exception e)
       {
