@@ -51,9 +51,17 @@ namespace knights_quest_cs.Service
       }
 
     }
-    public object DeleteKnight(int id)
+    public string DeleteKnight(int id)
     {
-      return _knightsRepo.DeleteKnight(id);
+      var updated = _knightsRepo.DeleteKnight(id);
+      if (updated > 0)
+      {
+        return "Successfully Deleted";
+      }
+      else
+      {
+        throw new Exception("could not delete");
+      }
     }
   }
 }

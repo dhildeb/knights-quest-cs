@@ -55,12 +55,12 @@ namespace knights_quest_cs.Data
       return _db.Execute(sql, knightData);
     }
 
-    public Knight DeleteKnight(int id)
+    public int DeleteKnight(int id)
     {
       var sql = @"
-      DELETE knight WHERE id = @id
+      DELETE FROM knight WHERE id = @id
       ";
-      return _db.ExecuteScalar<Knight>(sql, id);
+      return _db.Execute(sql, new { id });
     }
   }
 }

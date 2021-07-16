@@ -69,13 +69,12 @@ namespace knights_quest_cs.Controllers
       }
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public ActionResult<Knight> DeleteKnight(int id)
     {
       try
       {
-        var knight = _ks.DeleteKnight(id);
-        return Ok(knight);
+        return Ok(_ks.DeleteKnight(id));
       }
       catch (System.Exception e)
       {
